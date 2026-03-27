@@ -13,3 +13,20 @@ body {
     color-scheme: dark;
   }
 }
+
+body {
+  min-height: 100vh;
+  width: 100%;
+}
+
+h1 {
+  @apply text-3xl font-bold;
+}
+
+h2 {
+  @apply text-2xl font-bold;
+}
+
+input[type="submit"] {
+  @apply bg-black text-white rounded-full p-2;
+}
