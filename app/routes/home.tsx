@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
 import { useLoaderData } from "react-router-dom";
-import { fetchBackgroundColor, sendBackgroundColor, fetchFont, sendFont } from "../api/background";
+import { fetchBackgroundColor, sendBackgroundColor, fetchFont, sendFont } from "../api/style";
 import { useEffect } from "react";
 
 export function meta({}: Route.MetaArgs) {
