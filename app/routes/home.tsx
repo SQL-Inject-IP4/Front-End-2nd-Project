@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
 import { useLoaderData } from "react-router-dom";
-import { fetchBackgroundColor, setBackgroundColor } from "../api/background";
+import { fetchBackgroundColor, sendBackgroundColor } from "../api/background";
 import { useEffect } from "react";
 
 export function meta({}: Route.MetaArgs) {
@@ -25,8 +25,7 @@ function handleSubmit(e) {
 
   const color = `rgb(${r}, ${g}, ${b})`;
 
-  setBackgroundColor(color);
-  
+  sendBackgroundColor(color);
 }
 
 export default function Home() {
