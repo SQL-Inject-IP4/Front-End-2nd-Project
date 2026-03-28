@@ -1,32 +1,194 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+  --font-sans: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  background: #e2e8f0;
+  color: #0f172a;
+  transition: background-color 180ms ease;
 }
 
 body {
   min-height: 100vh;
   width: 100%;
+  margin: 0;
+  font-family: var(--font-sans);
+  transition:
+    background-color 180ms ease,
+    font-family 120ms ease;
 }
 
 h1 {
-  @apply text-3xl font-bold;
+  font-size: clamp(2.4rem, 4vw, 4.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  margin: 0;
 }
 
 h2 {
-  @apply text-2xl font-bold;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
 }
 
-input[type="submit"] {
-  @apply bg-black text-white rounded-full p-2;
+.page-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+
+.hero-card,
+.info-card,
+.form-card,
+.viewer-card {
+  border: 1px solid rgb(15 23 42 / 0.08);
+  border-radius: 1.5rem;
+  background: rgb(255 255 255 / 0.82);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 50px rgb(14 116 144 / 0.12);
+}
+
+.hero-card {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+.subtitle {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.auth-panel,
+.info-card,
+.form-card,
+.viewer-card {
+  padding: 1.5rem;
+}
+
+.auth-panel {
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+  color: white;
+}
+
+.auth-panel p {
+  margin-top: 0;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.info-card {
+  grid-column: 1 / -1;
+}
+
+form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+label {
+  font-weight: 600;
+}
+
+input[type="number"],
+input[type="text"],
+select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgb(15 23 42 / 0.12);
+  border-radius: 0.9rem;
+  padding: 0.8rem 1rem;
+  background: rgb(255 255 255 / 0.9);
+  color: inherit;
+}
+
+.select-shell {
+  position: relative;
+}
+
+.select-shell::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-right: 2px solid rgb(15 23 42 / 0.65);
+  border-bottom: 2px solid rgb(15 23 42 / 0.65);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 3rem;
+  cursor: pointer;
+}
+
+input[type="submit"],
+.primary-button,
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 1.2rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+input[type="submit"],
+.primary-button {
+  background: linear-gradient(135deg, #0f172a, #0369a1);
+  color: white;
+}
+
+.secondary-button {
+  background: rgb(255 255 255 / 0.12);
+  color: white;
+  border: 1px solid rgb(255 255 255 / 0.18);
+}
+
+@media (max-width: 800px) {
+  .hero-card,
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
 }
