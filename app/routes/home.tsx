@@ -17,6 +17,14 @@ const FONT_OPTIONS = [
   "\"Lucida Console\", monospace"
 ];
 
+const PHOTO_MEMBERS = [
+  { photo: "/tristan.jpeg", name: "Tristan Rasheed Satria", npm: "2406358472" },
+  { photo: "/ibaadi.jpeg", name: "Muhammad Ibaadi Ilmi", npm: "2406357684" },
+  { photo: "/fitto.jpeg", name: "Fitto Fadhelli Voltanie Ariyana", npm: "	2406423401" },
+  { photo: "/amar.jpeg", name: "Amar Hakim", npm: "2406429563" },
+  { photo: "/falah.jpeg", name: "Muhammad Hadziqul Falah Teguh", npm: "2406437432" },
+];
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "SQL Inject IP4" },
@@ -179,6 +187,43 @@ export default function Home() {
           </div>
         </div>
       )}
+    </section>
+
+    <section className="viewer-card" style={{ marginTop: "1.5rem" }}>
+      <h2>Daftar Anggota</h2>
+      <div style={{ display: "flex", flexDirection: "row", gap: "1rem", flexWrap: "wrap" }}>
+        {PHOTO_MEMBERS.map((member) => (
+          <article
+            key={member.photo}
+            className="info-card"
+            style={{
+              flex: "1 1 calc((100% - 2rem) / 3)",
+              maxWidth: "calc((100% - 2rem) / 3)",
+              minWidth: "220px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center"
+            }}
+          >
+            <img
+              src={member.photo}
+              alt={member.name}
+              style={{ width: "160px", height: "160px", objectFit: "cover", borderRadius: "8px" }}
+            />
+            <p>
+              <strong>Name:</strong>
+              <br />
+              {member.name}
+            </p>
+            <p>
+              <strong>NPM:</strong>
+              <br />
+              {member.npm}
+            </p>
+          </article>
+        ))}
+      </div>
     </section>
 
     {errorMessage ? (
