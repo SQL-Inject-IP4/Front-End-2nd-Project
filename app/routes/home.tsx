@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type CSSProperties, type FormEvent } from "react";
 import type { Route } from "./+types/home";
 import { fetchCurrentUser, logout, type AuthUser } from "../api/auth";
 import { BACKEND_URL } from "../api/backend";
@@ -313,6 +313,19 @@ export default function Home() {
   const fontOptions = getFontOptions(currentStyle?.fontFamily);
   const selectedFontOption = fontOptions.find((option) => option.stack === selectedFont);
   const primaryColorPreview = primaryColorHex.toUpperCase();
+  const canEditStyle = user?.role === "EDITOR";
+  const previewBackgroundColor = hexToRgbString(primaryColorHex);
+  const previewThemeTokens = createThemeTokens(parseRgb(previewBackgroundColor));
+  const previewCardStyle = {
+    "--preview-base": previewThemeTokens["--page-base"],
+    "--preview-ink": previewThemeTokens["--page-ink"],
+    "--preview-ink-soft": previewThemeTokens["--page-ink-soft"],
+    "--preview-surface": previewThemeTokens["--page-surface-strong"],
+    "--preview-border": previewThemeTokens["--page-border-strong"],
+    "--preview-accent": previewThemeTokens["--page-accent"],
+    "--preview-accent-soft": previewThemeTokens["--page-accent-soft"],
+    "--preview-font": selectedFont,
+  } as CSSProperties;
 
   async function handleLogout() {
     await logout();
@@ -526,106 +539,149 @@ export default function Home() {
           </div>
 
           <div className="studio-grid">
-            <article className="paper-card studio-card">
-              <div className="card-heading-row">
-                <p className="card-kicker">Primary Color</p>
-                <span className="card-badge">1 theme color</span>
-              </div>
-
-              <form className="studio-form" onSubmit={handleBackgroundSubmit}>
-                <div className="preview-panel">
-                  <div className="preview-swatch" style={{ backgroundColor: primaryColorHex }} />
-                  <div>
-                    <p className="preview-label">Current primary color</p>
-                    <strong>{primaryColorPreview}</strong>
-                  </div>
-                </div>
-
-                <label className="color-field" htmlFor="primary-color">
-                  <span>Pilih warna utama</span>
-                  <div className="color-picker-row">
-                    <input
-                      id="primary-color"
-                      className="color-picker"
-                      name="primary-color"
-                      onChange={(event) => setPrimaryColorHex(event.target.value)}
-                      required
-                      type="color"
-                      value={primaryColorHex}
-                    />
-                    <div className="color-value">{primaryColorPreview}</div>
-                  </div>
-                </label>
-
-                {user?.role === "EDITOR" ? (
-                  <button className="action-button primary-button" type="submit">
-                    Save primary color
-                  </button>
-                ) : (
-                  <p className="permission-copy">
-                    Hanya role EDITOR yang bisa menyimpan perubahan warna utama.
-                  </p>
-                )}
-              </form>
-            </article>
-
-            {user?.role === "EDITOR" ? (
-              <article className="paper-card studio-card font-studio-card">
-                <div className="card-heading-row">
-                  <p className="card-kicker">Word Style</p>
-                  <span className="card-badge">1 global font</span>
-                </div>
-
-                <form className="studio-form" onSubmit={handleFontSubmit}>
-                  <div className="font-preview-card">
-                    <p className="preview-label">Current font preview</p>
-                    <p className="font-preview-name">{selectedFontOption?.name ?? formatFontName(selectedFont)}</p>
-                    <p className="font-preview-sample" style={{ fontFamily: selectedFont }}>
-                      Biodata kelompok dengan gaya kata yang konsisten untuk seluruh halaman.
-                    </p>
-                    <p className="control-note">
-                      {selectedFontOption?.note ?? "Satu style font ini akan diterapkan secara global."}
-                    </p>
-                  </div>
-
-                  <label className="font-select-field" htmlFor="word-style">
-                    <span>Pilih style font global</span>
-                    <div className="font-select-shell">
-                      <select
-                        id="word-style"
-                        className="font-select"
-                        name="word-style"
-                        onChange={(event) => setSelectedFont(event.target.value)}
-                        value={selectedFont}
-                      >
-                        {fontOptions.map((option) => (
-                          <option key={option.stack} value={option.stack}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </label>
-
-                  <div className="selection-footer is-compact">
-                    <div>
-                      <p className="preview-label">Selected word style</p>
-                      <strong>{selectedFontOption?.badge ?? "Global"}</strong>
-                    </div>
-                    <button className="action-button primary-button" type="submit">
-                      Save font style
-                    </button>
-                  </div>
-                </form>
+            {!user ? (
+              <article className="paper-card studio-message-card">
+                <p>Login terlebih dahulu untuk membuka Style Studio.</p>
+              </article>
+            ) : !canEditStyle ? (
+              <article className="paper-card studio-message-card">
+                <p>Akun ini bukan registered account editor, jadi Style Studio tidak tersedia.</p>
               </article>
             ) : (
-              <article className="paper-card studio-card viewer-card">
-                <div className="card-heading-row">
-                  <p className="card-kicker">Viewer Mode</p>
-                  <span className="card-badge">Read only</span>
-                </div>
-                <h2>Role ini tidak bisa mengubah style.</h2>
-              </article>
+              <>
+                <article className="paper-card studio-card">
+                  <div className="card-heading-row">
+                    <p className="card-kicker">Primary Color</p>
+                    <span className="card-badge">1 theme color</span>
+                  </div>
+
+                  <form className="studio-form" onSubmit={handleBackgroundSubmit}>
+                    <div className="preview-panel">
+                      <div className="preview-swatch" style={{ backgroundColor: primaryColorHex }} />
+                      <div>
+                        <p className="preview-label">Current primary color</p>
+                        <strong>{primaryColorPreview}</strong>
+                      </div>
+                    </div>
+
+                    <label className="color-field" htmlFor="primary-color">
+                      <span>Pilih warna utama</span>
+                      <div className="color-picker-row">
+                        <input
+                          id="primary-color"
+                          className="color-picker"
+                          name="primary-color"
+                          onChange={(event) => setPrimaryColorHex(event.target.value)}
+                          required
+                          type="color"
+                          value={primaryColorHex}
+                        />
+                        <div className="color-value">{primaryColorPreview}</div>
+                      </div>
+                    </label>
+
+                    <button className="action-button primary-button" type="submit">
+                      Save primary color
+                    </button>
+                  </form>
+                </article>
+
+                <article className="paper-card studio-card font-studio-card">
+                  <div className="card-heading-row">
+                    <p className="card-kicker">Word Style</p>
+                    <span className="card-badge">1 global font</span>
+                  </div>
+
+                  <form className="studio-form" onSubmit={handleFontSubmit}>
+                    <div className="font-preview-card">
+                      <p className="preview-label">Current font preview</p>
+                      <p className="font-preview-name">{selectedFontOption?.name ?? formatFontName(selectedFont)}</p>
+                      <p className="font-preview-sample" style={{ fontFamily: selectedFont }}>
+                        Biodata kelompok dengan gaya kata yang konsisten untuk seluruh halaman.
+                      </p>
+                      <p className="control-note">
+                        {selectedFontOption?.note ?? "Satu style font ini akan diterapkan secara global."}
+                      </p>
+                    </div>
+
+                    <label className="font-select-field" htmlFor="word-style">
+                      <span>Pilih style font global</span>
+                      <div className="font-select-shell">
+                        <select
+                          id="word-style"
+                          className="font-select"
+                          name="word-style"
+                          onChange={(event) => setSelectedFont(event.target.value)}
+                          value={selectedFont}
+                        >
+                          {fontOptions.map((option) => (
+                            <option key={option.stack} value={option.stack}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </label>
+
+                    <div className="selection-footer is-compact">
+                      <div>
+                        <p className="preview-label">Selected word style</p>
+                        <strong>{selectedFontOption?.badge ?? "Global"}</strong>
+                      </div>
+                      <button className="action-button primary-button" type="submit">
+                        Save font style
+                      </button>
+                    </div>
+                  </form>
+                </article>
+
+                <article className="paper-card studio-preview-card" style={previewCardStyle}>
+                  <div className="card-heading-row">
+                    <p className="card-kicker">Preview Result</p>
+                    <span className="card-badge">Before save</span>
+                  </div>
+
+                  <div className="studio-preview-layout">
+                    <div className="studio-preview-notes">
+                      <p className="preview-label">Preview warna dan word style</p>
+                      <h3>{selectedFontOption?.name ?? formatFontName(selectedFont)}</h3>
+                      <p className="control-note">
+                        Kotak ini menunjukkan kira-kira hasil tampilan kalau pilihan warna dan font yang sekarang kamu simpan.
+                      </p>
+
+                      <div className="preview-meta-list">
+                        <div className="preview-meta-item">
+                          <span>Primary color</span>
+                          <strong>{primaryColorPreview}</strong>
+                        </div>
+                        <div className="preview-meta-item">
+                          <span>Word style</span>
+                          <strong>{selectedFontOption?.badge ?? "Selected"}</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="studio-preview-canvas">
+                      <div className="studio-preview-chip-row">
+                        <span className="studio-preview-chip">Live preview</span>
+                        <span className="studio-preview-chip is-soft">{formatFontName(selectedFont)}</span>
+                      </div>
+
+                      <h4>Kalau disimpan, nuansa website akan bergerak ke arah ini.</h4>
+                      <p>
+                        Warna utama akan mempengaruhi panel, aksen, dan titik fokus visual. Font pilihanmu juga akan
+                        mengubah karakter seluruh isi halaman secara global.
+                      </p>
+
+                      <div className="studio-preview-mini-card">
+                        <p className="studio-preview-mini-kicker">Example card</p>
+                        <strong>SQL Inject IP4</strong>
+                        <span>Biodata kelompok dengan tampilan yang lebih sesuai pilihan terbaru.</span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </>
             )}
           </div>
         </section>
