@@ -465,7 +465,7 @@ export default function Home() {
               </div>
               <div className="detail-row">
                 <span>Updated by</span>
-                <strong>{currentStyle.updatedBy?.name ?? currentStyle.updatedBy?.email ?? "System seed"}</strong>
+                <strong>{currentStyle.updatedBy?.name ?? "Registered editor"}</strong>
               </div>
               <div className="detail-row">
                 <span>Last saved</span>

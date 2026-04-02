@@ -8,7 +8,6 @@ export type StyleSettings = {
   updatedAt: string;
   updatedBy: {
     id: string;
-    email: string;
     name: string | null;
     role: "EDITOR" | "VIEWER";
   } | null;
