@@ -1,4 +1,9 @@
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ?? "http://localhost:4000";
+const configuredBackendUrl = import.meta.env.VITE_BACKEND_URL?.trim();
+
+export const BACKEND_URL =
+  configuredBackendUrl === undefined
+    ? "http://localhost:4000"
+    : configuredBackendUrl.replace(/\/+$/, "");
 
 export async function backendFetch(path: string, init: RequestInit = {}, cookie?: string) {
   const headers = new Headers(init.headers);

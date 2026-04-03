@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/auth/(.*)",
+      "destination": "https://be-pekapel.vercel.app/auth/$1"
+    },
+    {
+      "source": "/api/auth/(.*)",
+      "destination": "https://be-pekapel.vercel.app/api/auth/$1"
+    },
+    {
+      "source": "/api/style",
+      "destination": "https://be-pekapel.vercel.app/api/style"
+    },
+    {
+      "source": "/health",
+      "destination": "https://be-pekapel.vercel.app/health"
+    }
+  ]
+}
